@@ -4,166 +4,181 @@
 <meta charset="UTF-8">
 <title>Erika Fashion · Dashboard hub</title>
 <meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
-* { box-sizing: border-box; margin: 0; padding: 0; }
-:root { --bg:#0a0a0a; --fg:#fff; --muted:#888; --line:#222; --card:#161616; --accent:#fff; }
-body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", sans-serif;
-  background: var(--bg); color: var(--fg); min-height: 100vh; line-height: 1.5; }
-.shell { max-width: 1100px; margin: 0 auto; padding: 40px 24px; min-height: 100vh; display: flex; flex-direction: column; }
+:root {
+  --bg: #f5f6fa;
+  --card: #ffffff;
+  --border: #e2e5ed;
+  --text: #1a1a2e;
+  --text-sec: #4a5568;
+  --text-muted: #9ca3af;
+  --accent: #AE821F;
+  --accent-dim: rgba(174,130,31,0.08);
+  --shadow: 0 1px 3px rgba(0,0,0,0.08);
+}
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  background: var(--bg); color: var(--text); line-height: 1.5; min-height: 100vh; -webkit-font-smoothing: antialiased; }
 
-.brand { display: flex; align-items: center; gap: 18px; padding-bottom: 28px; border-bottom: 1px solid var(--line); }
-.brand img { height: 38px; filter: brightness(0) invert(1); }
-.brand-fallback { font-size: 22px; font-weight: 800; letter-spacing: -0.5px; }
-.brand-tag { color: var(--muted); font-size: 13px; margin-left: auto; }
+/* LOGIN */
+.login-overlay { position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: var(--bg);
+  z-index: 9999; display: flex; align-items: flex-start; justify-content: center; padding: 48px 24px; overflow-y: auto; }
+.login-card { background: #fff; border: 1px solid var(--border); box-shadow: 0 4px 12px rgba(0,0,0,0.06);
+  padding: 40px 36px; width: 100%; max-width: 420px; text-align: center; margin: auto 0; }
+.login-brand { display: block; text-decoration: none; margin-bottom: 22px; padding-bottom: 16px; border-bottom: 1px solid var(--border); }
+.login-brand:hover .login-brand-text { color: var(--accent); }
+.login-logo { height: 36px; display: block; margin: 0 auto 6px; }
+.login-brand-text { display: block; font-size: 10px; color: var(--text-muted); letter-spacing: 0.2px; transition: color .15s; }
+.login-title { font-size: 18px; font-weight: 700; color: var(--text); margin-bottom: 8px; }
+.login-subtitle { font-size: 14px; color: var(--text-sec); margin-bottom: 24px; }
+.login-form { display: flex; flex-direction: column; gap: 12px; }
+.login-form input { font-family: inherit; font-size: 14px; padding: 12px 14px; border: 1px solid var(--border);
+  border-radius: 0; background: var(--bg); color: var(--text); outline: none; transition: border-color .15s; }
+.login-form input:focus { border-color: var(--accent); background: #fff; }
+.login-form button { font-family: inherit; font-size: 14px; font-weight: 600; padding: 12px 20px;
+  background: var(--accent); color: #fff; border: none; border-radius: 0; cursor: pointer; transition: background .15s; }
+.login-form button:hover { background: #8c6818; }
+.login-error { margin-top: 14px; font-size: 13px; color: #d32f2f; }
+body.locked { overflow: hidden; }
+body.locked > *:not(#loginOverlay):not(script) { display: none !important; }
 
-main { flex: 1; display: flex; align-items: center; justify-content: center; padding: 40px 0; }
+/* HUB */
+.hub-shell { max-width: 1100px; margin: 0 auto; padding: 0 32px; }
+.hub-header { background: var(--card); border-bottom: 1px solid var(--border); padding: 28px 0; }
+.hub-header-inner { display: flex; align-items: center; gap: 24px; flex-wrap: wrap; }
+.hub-logo { height: 36px; }
+.hub-header-text { flex: 1; }
+.hub-header-text h1 { font-size: 22px; font-weight: 700; }
+.hub-header-text p { font-size: 14px; color: var(--text-sec); margin-top: 2px; }
+.hub-logout { color: var(--text-muted); text-decoration: none; font-size: 12px; padding: 6px 14px; border: 1px solid var(--border); transition: all .15s; }
+.hub-logout:hover { color: var(--accent); border-color: var(--accent); }
 
-/* GATE */
-.gate { max-width: 420px; width: 100%; text-align: center; }
-.gate h1 { font-size: 28px; font-weight: 700; letter-spacing: -0.5px; margin-bottom: 8px; }
-.gate p { color: var(--muted); margin-bottom: 32px; font-size: 14px; }
-.gate input { width: 100%; padding: 14px 16px; background: var(--card); color: var(--fg); border: 1px solid var(--line);
-  border-radius: 10px; font-size: 15px; outline: none; transition: border-color .15s; font-family: inherit; }
-.gate input:focus { border-color: var(--fg); }
-.gate button { width: 100%; margin-top: 12px; padding: 14px 16px; background: var(--fg); color: var(--bg); border: none;
-  border-radius: 10px; font-size: 15px; font-weight: 600; cursor: pointer; transition: opacity .15s; font-family: inherit; }
-.gate button:hover { opacity: 0.85; }
-.gate-error { color: #ff6b6b; font-size: 13px; margin-top: 12px; min-height: 18px; }
-
-/* DASHBOARD GRID */
-.hub { display: none; max-width: 920px; width: 100%; }
-.hub-intro { text-align: center; margin-bottom: 40px; }
-.hub-intro h1 { font-size: 32px; font-weight: 700; letter-spacing: -0.5px; margin-bottom: 8px; }
-.hub-intro p { color: var(--muted); }
-.cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(380px, 1fr)); gap: 20px; }
-.card { background: var(--card); border: 1px solid var(--line); border-radius: 14px; padding: 28px; text-decoration: none;
-  color: var(--fg); transition: border-color .2s, transform .2s; display: flex; flex-direction: column; gap: 14px;
-  position: relative; overflow: hidden; }
-.card:hover { border-color: var(--fg); transform: translateY(-2px); }
-.card .icon { font-size: 28px; }
-.card h2 { font-size: 22px; font-weight: 700; letter-spacing: -0.3px; }
-.card p { color: var(--muted); font-size: 14px; flex: 1; }
-.card .cta { display: inline-flex; align-items: center; gap: 6px; font-size: 14px; font-weight: 600; margin-top: 6px; }
+.hub-main { padding: 48px 32px; }
+.hub-intro { text-align: center; margin-bottom: 36px; }
+.hub-intro h2 { font-size: 28px; font-weight: 700; letter-spacing: -0.5px; margin-bottom: 8px; }
+.hub-intro p { color: var(--text-sec); }
+.cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(380px, 1fr)); gap: 20px; max-width: 900px; margin: 0 auto; }
+.card { background: var(--card); border: 1px solid var(--border); padding: 28px; text-decoration: none;
+  color: var(--text); transition: all .2s; display: flex; flex-direction: column; gap: 12px; box-shadow: var(--shadow); }
+.card:hover { border-color: var(--accent); transform: translateY(-2px); box-shadow: 0 4px 12px rgba(174,130,31,0.15); }
+.card .icon { font-size: 24px; }
+.card h3 { font-size: 18px; font-weight: 700; }
+.card p { color: var(--text-sec); font-size: 13px; flex: 1; line-height: 1.5; }
+.card .cta { display: inline-flex; align-items: center; gap: 6px; font-size: 13px; font-weight: 600; color: var(--accent); margin-top: 4px; }
 .card .cta::after { content: "→"; transition: transform .2s; }
 .card:hover .cta::after { transform: translateX(4px); }
-.card .meta { font-size: 11px; color: var(--muted); text-transform: uppercase; letter-spacing: 0.6px;
-  border-top: 1px solid var(--line); padding-top: 14px; margin-top: 6px; }
+.card .meta { font-size: 10px; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.6px;
+  border-top: 1px solid var(--border); padding-top: 12px; margin-top: 8px; }
 
-.logout { text-align: center; margin-top: 32px; }
-.logout a { color: var(--muted); font-size: 12px; text-decoration: none; }
-.logout a:hover { color: var(--fg); }
-
-footer { text-align: center; color: var(--muted); font-size: 11px; padding: 24px 0;
-  border-top: 1px solid var(--line); }
+.hub-footer { text-align: center; color: var(--text-muted); font-size: 11px;
+  padding: 24px; border-top: 1px solid var(--border); margin-top: 48px; background: var(--card); }
 </style>
 </head>
-<body>
-<div class="shell">
+<body class="locked">
 
-<header class="brand">
-  <img src="https://cdn.myshoptet.com/usr/www.erikafashion.cz/user/logos/logo-erikafashion.svg"
-       alt="Erika Fashion"
-       onerror="this.style.display='none';this.nextElementSibling.style.display='inline-block'">
-  <span class="brand-fallback" style="display:none">Erika Fashion</span>
-  <div class="brand-tag">Dashboard hub</div>
+<!-- LOGIN OVERLAY -->
+<div id="loginOverlay" class="login-overlay">
+  <div class="login-card">
+    <a href="https://patrikpilous.cz" target="_blank" rel="noopener" class="login-brand">
+      <img src="https://patrikpilous.cz/wp-content/uploads/2021/05/PP212-e1676225077530.png" alt="Patrik Pilous" class="login-logo">
+      <span class="login-brand-text">Patrik Pilous · Marketingový stratég a SEO konzultant</span>
+    </a>
+    <h2 class="login-title">Erika Fashion · Dashboard hub</h2>
+    <p class="login-subtitle">Pro vstup zadejte přístupové údaje</p>
+    <form id="loginForm" class="login-form">
+      <input type="text" id="loginUser" placeholder="Přihlašovací jméno" autocomplete="username" autocapitalize="none" autofocus>
+      <input type="password" id="loginPassword" placeholder="Heslo" autocomplete="current-password">
+      <button type="submit">Vstoupit</button>
+    </form>
+    <p class="login-error" id="loginError" style="display:none">Nesprávné přihlašovací údaje. Zkuste to znovu.</p>
+  </div>
+</div>
+
+<!-- HUB CONTENT -->
+<header class="hub-header">
+<div class="hub-shell">
+  <div class="hub-header-inner">
+    <img src="https://www.erikafashion.cz/user/logos/logo-erikafashion.svg" alt="Erika Fashion" class="hub-logo">
+    <div class="hub-header-text">
+      <h1>Dashboard hub</h1>
+      <p>Marketingové dashboardy · vyber jeden a otevři</p>
+    </div>
+    <a href="#" class="hub-logout" onclick="logout();return false;">Odhlásit</a>
+  </div>
+</div>
 </header>
 
-<main>
-  <!-- GATE -->
-  <section class="gate" id="gate">
-    <h1>Přihlášení</h1>
-    <p>Marketingové dashboardy pro tým Erika Fashion.</p>
-    <input type="password" id="pwd" placeholder="Heslo" autocomplete="off"
-           onkeydown="if(event.key==='Enter')checkPwd()">
-    <button onclick="checkPwd()">Pokračovat</button>
-    <div class="gate-error" id="err"></div>
-  </section>
-
-  <!-- HUB -->
-  <section class="hub" id="hub">
-    <div class="hub-intro">
-      <h1>Vítej zpět</h1>
-      <p>Vyber dashboard, ke kterému chceš přejít.</p>
-    </div>
-    <div class="cards">
-      <a class="card" id="card-orders" href="#" target="_blank" rel="noopener">
-        <div class="icon">📦</div>
-        <h2>Dashboard objednávek</h2>
-        <p>Klouzavý rok prodejů s napojením na počasí — měsíční trendy, dny v týdnu, teplotní pásma, kategorie, geografie krajů, B2B vs B2C.</p>
-        <span class="cta">Otevřít</span>
-        <div class="meta">~100 tis. objednávek · Shoptet + Open-Meteo · GDPR anonymizováno</div>
-      </a>
-
-      <a class="card" id="card-sos" href="#" target="_blank" rel="noopener">
-        <div class="icon">🔍</div>
-        <h2>Share of Search</h2>
-        <p>Kompetitivní analýza českého fashion trhu — brandové vyhledávání, organická návštěvnost, GSC data, share of voice mezi 18 značkami.</p>
-        <span class="cta">Otevřít</span>
-        <div class="meta">25 měsíců historie · Ahrefs + GSC · měsíční update</div>
-      </a>
-    </div>
-    <div class="logout"><a href="#" onclick="logout();return false;">Odhlásit</a></div>
-  </section>
+<main class="hub-main">
+<div class="hub-intro">
+  <h2>Vítej zpět 👋</h2>
+  <p>Vyber dashboard, na který chceš přejít.</p>
+</div>
+<div class="cards">
+  <a class="card" href="https://patrikpilous-dev.github.io/erikafashion-dashboard/" target="_blank" rel="noopener">
+    <div class="icon">📦</div>
+    <h3>Dashboard objednávek</h3>
+    <p>Klouzavý rok prodejů s napojením na počasí — měsíční trendy, dny v týdnu, teplotní pásma, kategorie i sub-kategorie, geografie krajů, B2B vs B2C, demografická saturace měst.</p>
+    <span class="cta">Otevřít</span>
+    <div class="meta">~100 tis. obj. · Shoptet + Open-Meteo · GDPR</div>
+  </a>
+  <a class="card" href="https://patrikpilous-dev.github.io/erikafashion-sos/" target="_blank" rel="noopener">
+    <div class="icon">🔍</div>
+    <h3>Share of Search</h3>
+    <p>Kompetitivní analýza českého fashion trhu — brandové vyhledávání, organická návštěvnost, GSC, share of voice mezi 18 značkami.</p>
+    <span class="cta">Otevřít</span>
+    <div class="meta">25 měsíců historie · Ahrefs + GSC · měsíční update</div>
+  </a>
+</div>
 </main>
 
-<footer>
+<footer class="hub-footer">
   Erika Fashion · Dashboard hub · privátní obsah pro tým &amp; klienta
 </footer>
 
-</div>
-
 <script>
-// Klientská password gate. Hash je SHA-256 hesla.
-// Změna hesla: spočítat nový SHA-256 v konzoli:
-//   crypto.subtle.digest('SHA-256', new TextEncoder().encode('NOVE_HESLO'))
-//     .then(b => console.log(Array.from(new Uint8Array(b)).map(x=>x.toString(16).padStart(2,'0')).join('')));
-// a vložit níže.
-const PWD_HASH = "4d8331bdcfa5989ed40a6db9822d8ca5f28883b84333e7df448593e553d59e8a"; // sha256 hesla "erikafashion-2026"
+// Sdílený login (stejný HASH jako SoS — uživatelské jméno + heslo)
+var ACCESS_USER = 'EF';
+var ACCESS_HASH = 'b6e4bb47f6541f338efd8ceb313603a10b36832fbd7f188427ef044d7e4bfe64';
+var STORAGE_KEY = 'ef-auth-v1';
 
-// Cílové URL — ujisti se, že tyto repos jsou dostupné přes GitHub Pages
-const URL_ORDERS = "https://patrikpilous-dev.github.io/erikafashion-dashboard/";
-const URL_SOS    = "https://patrikpilous-dev.github.io/erikafashion-sos/";
-
-const STORAGE_KEY = "erika_hub_auth_v1";
-
-async function sha256(s) {
-  const buf = await crypto.subtle.digest("SHA-256", new TextEncoder().encode(s));
-  return Array.from(new Uint8Array(buf)).map(x => x.toString(16).padStart(2, "0")).join("");
+async function sha256(str) {
+  var buf = new TextEncoder().encode(str);
+  var hash = await crypto.subtle.digest('SHA-256', buf);
+  return Array.from(new Uint8Array(hash)).map(function(b){return b.toString(16).padStart(2,'0');}).join('');
 }
 
-async function checkPwd() {
-  const v = document.getElementById("pwd").value;
-  const err = document.getElementById("err");
-  if (!v) { err.textContent = "Zadej heslo."; return; }
-  const h = await sha256(v);
-  if (h === PWD_HASH) {
-    sessionStorage.setItem(STORAGE_KEY, h);
-    showHub();
-  } else {
-    err.textContent = "Nesprávné heslo.";
-  }
-}
-
-function showHub() {
-  document.getElementById("gate").style.display = "none";
-  document.getElementById("hub").style.display = "block";
-  document.getElementById("card-orders").href = URL_ORDERS;
-  document.getElementById("card-sos").href = URL_SOS;
+function unlock() {
+  document.body.classList.remove('locked');
+  document.getElementById('loginOverlay').style.display = 'none';
 }
 
 function logout() {
-  sessionStorage.removeItem(STORAGE_KEY);
-  document.getElementById("gate").style.display = "block";
-  document.getElementById("hub").style.display = "none";
-  document.getElementById("pwd").value = "";
-  document.getElementById("err").textContent = "";
+  localStorage.removeItem(STORAGE_KEY);
+  document.body.classList.add('locked');
+  document.getElementById('loginOverlay').style.display = 'flex';
+  document.getElementById('loginUser').value = '';
+  document.getElementById('loginPassword').value = '';
+  document.getElementById('loginError').style.display = 'none';
 }
 
-// Auto-show pokud už je v sessionStorage
-(async () => {
-  const stored = sessionStorage.getItem(STORAGE_KEY);
-  if (stored && stored === PWD_HASH) showHub();
-  else document.getElementById("pwd").focus();
+(function init(){
+  if (localStorage.getItem(STORAGE_KEY) === ACCESS_HASH) return unlock();
+  document.getElementById('loginForm').addEventListener('submit', async function(e){
+    e.preventDefault();
+    var u = document.getElementById('loginUser').value.trim();
+    var p = document.getElementById('loginPassword').value;
+    var h = await sha256(u + ':' + p);
+    if (u === ACCESS_USER && h === ACCESS_HASH) {
+      localStorage.setItem(STORAGE_KEY, h);
+      unlock();
+    } else {
+      document.getElementById('loginError').style.display = 'block';
+      document.getElementById('loginPassword').value = '';
+    }
+  });
 })();
 </script>
 </body>
