@@ -60,7 +60,7 @@ body.locked > *:not(#loginOverlay):not(script) { display: none !important; }
 .hub-intro { text-align: center; margin-bottom: 36px; }
 .hub-intro h2 { font-size: 28px; font-weight: 700; letter-spacing: -0.5px; margin-bottom: 8px; }
 .hub-intro p { color: var(--text-sec); }
-.cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(380px, 1fr)); gap: 20px; max-width: 900px; margin: 0 auto; }
+.cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 20px; max-width: 1100px; margin: 0 auto; }
 .card { background: var(--card); border: 1px solid var(--border); padding: 28px; text-decoration: none;
   color: var(--text); transition: all .2s; display: flex; flex-direction: column; gap: 12px; box-shadow: var(--shadow); }
 .card:hover { border-color: var(--accent); transform: translateY(-2px); box-shadow: 0 4px 12px rgba(174,130,31,0.15); }
@@ -120,9 +120,16 @@ body.locked > *:not(#loginOverlay):not(script) { display: none !important; }
   <a class="card" href="https://patrikpilous-dev.github.io/erikafashion-dashboard/" target="_blank" rel="noopener">
     <div class="icon">📦</div>
     <h3>Dashboard objednávek</h3>
-    <p>Klouzavý rok prodejů s napojením na počasí — měsíční trendy, dny v týdnu, teplotní pásma, kategorie i sub-kategorie, geografie krajů, B2B vs B2C, demografická saturace měst.</p>
+    <p>Klouzavý rok prodejů s počasím — měsíční trendy, dny v týdnu, teplotní pásma, hodiny, velikosti, cohort retention, basket analysis, kategorie, geografie krajů.</p>
     <span class="cta">Otevřít</span>
     <div class="meta">~100 tis. obj. · Shoptet + Open-Meteo · GDPR</div>
+  </a>
+  <a class="card" href="https://patrikpilous-dev.github.io/erikafashion-vratky/" target="_blank" rel="noopener">
+    <div class="icon">↩️</div>
+    <h3>Dashboard vrátek</h3>
+    <p>Return rate analytics — sezónnost vrátek, per kategorie/velikost, TOP nejvratkovější ze 100 nejprodávanějších, heatmapa kategorie × velikost.</p>
+    <span class="cta">Otevřít</span>
+    <div class="meta">25 tis. vrátek · 17 mil. Kč · per produkt</div>
   </a>
   <a class="card" href="https://patrikpilous-dev.github.io/erikafashion-sos/" target="_blank" rel="noopener">
     <div class="icon">🔍</div>
